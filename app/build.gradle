@@ -21,6 +21,7 @@ android {
     def apkVersionTag = System.getenv("TERMUX_APK_VERSION_TAG") ?: ""
     def splitAPKsForDebugBuilds = System.getenv("TERMUX_SPLIT_APKS_FOR_DEBUG_BUILDS") ?: "1"
     def splitAPKsForReleaseBuilds = System.getenv("TERMUX_SPLIT_APKS_FOR_RELEASE_BUILDS") ?: "0" // F-Droid does not support split APKs #1904
+    def useDebugSigningForRelease = System.getenv("TERMUX_USE_DEBUG_SIGNING_FOR_RELEASE") ?: "0"
 
     dependencies {
         implementation "androidx.annotation:annotation:1.9.0"
@@ -88,6 +89,9 @@ android {
 
     buildTypes {
         release {
+            if (useDebugSigningForRelease == "1") {
+                signingConfig signingConfigs.debug
+            }
             minifyEnabled true
             shrinkResources false // Reproducible builds
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
