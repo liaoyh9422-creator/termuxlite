@@ -241,6 +241,7 @@ task downloadBootstraps() {
 }
 
 afterEvaluate {
+    preBuild.dependsOn(downloadBootstraps)
     android.applicationVariants.all { variant ->
         variant.javaCompileProvider.get().dependsOn(downloadBootstraps)
     }
